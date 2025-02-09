@@ -10,12 +10,17 @@ namespace ProjectUtility.Core
         private IAction[] _actions;
 
         public string Name => _name;
-
-        public float Score => _score;
         
         public IConsideration[] Considerations => _considerations;
 
         public IAction[] Actions => _actions;
+
+        public DecisionBase(string name, IConsideration[] considerations, IAction[] actions)
+        {
+            _name = name;
+            _considerations = considerations;
+            _actions = actions;
+        }
 
         public float Evaluate(IContext context)
         {
@@ -40,9 +45,12 @@ namespace ProjectUtility.Core
             return _score = score;
         }
 
-        public void Take(IContext context)
+        public void Make(IContext context)
         {
-            throw new System.NotImplementedException();
+            foreach (var action in Actions)
+            {
+                action.Execute(context);
+            }
         }
     }
 }

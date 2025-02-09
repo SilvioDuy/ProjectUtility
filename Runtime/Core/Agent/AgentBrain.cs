@@ -27,7 +27,7 @@ namespace ProjectUtility.Core
                 }
             }
 
-            _bestDecision.Take(_context);
+            _bestDecision.Make(_context);
         }
     }
 }

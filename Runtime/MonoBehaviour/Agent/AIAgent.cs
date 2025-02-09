@@ -5,14 +5,16 @@ namespace ProjectUtility
 {
     public class AIAgent : MonoBehaviour
     {
-        private AgentBrain brain;
+        private AgentBrain _brain;
 
-        private void Start()
+        public void Setup(IDecision[] decisions, IContext context)
         {
+            _brain = new AgentBrain(decisions, context);
         }
 
         private void Update()
         {
+            _brain?.Think();
         }
     }
 }
