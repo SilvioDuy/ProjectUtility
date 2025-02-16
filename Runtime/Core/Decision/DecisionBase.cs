@@ -1,3 +1,5 @@
+using ProjectUtility.Data;
+using System;
 using UnityEngine;
 
 namespace ProjectUtility.Core
@@ -20,6 +22,22 @@ namespace ProjectUtility.Core
             _name = name;
             _considerations = considerations;
             _actions = actions;
+        }
+
+        public DecisionBase(DecisionData data)
+        {
+            _name = data.Name;
+            _considerations = new IConsideration[data.Considerations.Length];
+            for (int i = 0; i < _considerations.Length; i++)
+            {
+                _considerations[i] = new ConsiderationBase(data.Considerations[i]);
+            }
+            
+            _actions = new IAction[data.Actions.Length];
+            for (int i = 0; i < _actions.Length; i++)
+            {
+                _actions[i] = (IAction)Activator.CreateInstance(data.Actions[i]);
+            }
         }
 
         public float Evaluate(IContext context)
