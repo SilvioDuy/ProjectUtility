@@ -9,10 +9,10 @@ namespace ProjectUtility.Data
     {
         [SerializeField] private string _name;
         [SerializeField] private ConsiderationData[] _considerations;
-        [TypeFilter(typeof(IAction))] [SerializeField] private SerializableType[] _actions;
+        [TypeFilter(typeof(IAction))] [SerializeField] private SerializableType _action;
 
         public string Name => _name;
         public ConsiderationData[] Considerations => _considerations;
-        public SerializableType[] Actions => _actions;
+        public SerializableType Action => _action;
     }
 }

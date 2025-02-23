@@ -1,6 +1,6 @@
 using ProjectUtility.Data;
 using System;
-using UnityEngine;
+using System.Diagnostics;
 
 namespace ProjectUtility.Core
 {
@@ -9,19 +9,21 @@ namespace ProjectUtility.Core
         private string _name;
         private float _score;
         private IConsideration[] _considerations;
-        private IAction[] _actions;
+        private IAction _action;
 
         public string Name => _name;
         
         public IConsideration[] Considerations => _considerations;
 
-        public IAction[] Actions => _actions;
+        public IAction Action => _action;
 
-        public DecisionBase(string name, IConsideration[] considerations, IAction[] actions)
+        public Action OnActionExecuted { get; set; }
+
+        public DecisionBase(string name, IConsideration[] considerations, IAction action)
         {
             _name = name;
             _considerations = considerations;
-            _actions = actions;
+            _action = action;
         }
 
         public DecisionBase(DecisionData data)
@@ -33,11 +35,7 @@ namespace ProjectUtility.Core
                 _considerations[i] = new ConsiderationBase(data.Considerations[i]);
             }
             
-            _actions = new IAction[data.Actions.Length];
-            for (int i = 0; i < _actions.Length; i++)
-            {
-                _actions[i] = (IAction)Activator.CreateInstance(data.Actions[i]);
-            }
+            _action = (IAction)Activator.CreateInstance(data.Action);
         }
 
         public float Evaluate(IContext context)
@@ -65,10 +63,28 @@ namespace ProjectUtility.Core
 
         public void Make(IContext context)
         {
-            foreach (var action in Actions)
-            {
-                action.Execute(context);
-            }
+            if (_action == null)
+                return;
+
+            //if (_action.InCooldown)
+            //    return;
+
+            _action.Execute(context);
+            _action.OnEnd += OnActionEnd;
+        }
+
+        public void Tick(IContext context)
+        {
+            //if (_action.InCooldown)
+            //    return;
+
+            _action?.Tick(context);
+        }
+
+        private void OnActionEnd()
+        {
+            _action.OnEnd -= OnActionEnd;
+            OnActionExecuted?.Invoke();
         }
     }
 }

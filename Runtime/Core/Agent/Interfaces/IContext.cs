@@ -4,7 +4,7 @@ namespace ProjectUtility.Core
 {
     public interface IContext 
     {
-        bool TryGetData(string dataType, out float data);
-        float GetData(string dataType);
+        bool TryGetResource(string dataType, out float data);
+        float GetResource(string dataType);
     }
 }

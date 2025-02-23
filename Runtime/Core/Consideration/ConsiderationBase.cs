@@ -23,10 +23,10 @@ namespace ProjectUtility.Core
 
         public float Consider(IContext context)
         {
-            if (!context.TryGetData(_inputDataName, out var inputData))
+            if (!context.TryGetResource(_inputDataName, out var inputData))
                 return 0f;
 
-            return _curve.Evaluate(Mathf.Clamp01(inputData / 100f));
+            return _curve.Evaluate(Mathf.Clamp01(inputData / 1000f));
         }
     }
 }
